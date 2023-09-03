@@ -469,6 +469,8 @@ fn get_field_type(field: cl_engine_field) -> EngineValueType {
         cl_engine_field::CL_ENGINE_MAX_SCRIPTNORMALIZE => EngineValueType::U64,
         cl_engine_field::CL_ENGINE_MAX_ZIPTYPERCG => EngineValueType::U64,
         cl_engine_field::CL_ENGINE_FORCETODISK => EngineValueType::U32,
+        #[cfg(clamav_1_2)]
+        cl_engine_field::CL_ENGINE_CACHE_SIZE => EngineValueType::U32,
         cl_engine_field::CL_ENGINE_DISABLE_CACHE => EngineValueType::U32,
         cl_engine_field::CL_ENGINE_DISABLE_PE_STATS => EngineValueType::U32,
         cl_engine_field::CL_ENGINE_STATS_TIMEOUT => EngineValueType::U32,

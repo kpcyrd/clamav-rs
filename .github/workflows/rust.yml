@@ -1,0 +1,33 @@
+name: Rust
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - image: archlinux:latest
+            install: pacman -Suy --noconfirm rust clamav pkg-config clang
+          - image: rust:latest
+            install: |
+              apt-get update
+              apt-get install -y libclamav-dev libclang-dev
+          - image: ubuntu:22.04
+            install: |
+              apt-get update
+              apt-get install -y libclamav-dev libclang-dev pkg-config cargo
+              curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+    name: ${{ matrix.os.image }}
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.os.image }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run:  ${{ matrix.os.install }}
+      - name: Build
+        run: cargo build

@@ -18,9 +18,22 @@ impl ClamError {
         }
     }
 
+    #[cfg(clamav_1_0)]
     pub fn string_error(&self) -> String {
         unsafe {
             let ptr = clamav_sys::cl_strerror(self.code);
+            let bytes = CStr::from_ptr(ptr).to_bytes();
+            str::from_utf8(bytes)
+                .ok()
+                .expect("Invalid UTF8 string")
+                .to_string()
+        }
+    }
+
+    #[cfg(not(clamav_1_0))]
+    pub fn string_error(&self) -> String {
+        unsafe {
+            let ptr = clamav_sys::cl_strerror(self.code as i32);
             let bytes = CStr::from_ptr(ptr).to_bytes();
             str::from_utf8(bytes)
                 .ok()
